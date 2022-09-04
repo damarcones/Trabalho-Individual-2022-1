@@ -17,9 +17,10 @@ services:
     ports:
       - "5432:5432"
 
-  web:
+  library_back:
     build:
       context: ./library_back
+    restart: always
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
     volumes:
@@ -35,3 +36,15 @@ services:
       - PORT=8000
     depends_on:
       - library_db
+
+  front-end:
+    build:
+      context: ./library_front
+    container_name: library_front
+    restart: always
+    volumes:
+      - ./:/library_front
+      - /library_front/node_modules
+      # - /visualeasy-front/.next
+    ports:
+      - "3000:3000"
