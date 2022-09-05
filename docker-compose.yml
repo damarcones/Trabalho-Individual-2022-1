@@ -20,6 +20,7 @@ services:
   library_back:
     build:
       context: ./library_back
+    container_name: library_back
     restart: always
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
@@ -48,3 +49,13 @@ services:
       # - /visualeasy-front/.next
     ports:
       - "3000:3000"
+
+  nginx:
+    build:
+      context: ../Trabalho-Individual-2022-2
+    container_name: container-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - "library_back"
+      - "front-end"
